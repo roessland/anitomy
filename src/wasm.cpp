@@ -30,11 +30,6 @@ char* duplicate(const std::string& source) noexcept {
 
 extern "C" {
 
-const char* anitomy_version(void) noexcept {
-  static const std::string v = std::string{anitomy::version()};
-  return v.c_str();
-}
-
 char* anitomy_parse(const char* input, int pretty) noexcept {
   if (!input) return nullptr;
   Tokenizer tokenizer{input};
@@ -43,16 +38,6 @@ char* anitomy_parse(const char* input, int pretty) noexcept {
   Parser parser{tokenizer.tokens()};
   parser.parse(options);
   return duplicate(serialize(to_json(parser.elements()), pretty != 0));
-}
-
-char* anitomy_parse_tokens(const char* input, int pretty, int verbose) noexcept {
-  if (!input) return nullptr;
-  Tokenizer tokenizer{input};
-  const Options options;
-  tokenizer.tokenize(options);
-  Parser parser{tokenizer.tokens()};
-  parser.parse(options);
-  return duplicate(serialize(to_json(parser.tokens(), verbose != 0), pretty != 0));
 }
 
 void anitomy_free(char* ptr) noexcept {
