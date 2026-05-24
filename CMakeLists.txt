@@ -18,8 +18,11 @@ include(AnitomyConfig)
 
 add_subdirectory(include)
 add_subdirectory(src)
-add_subdirectory(test)
 
-enable_testing()
-add_test(NAME "Unit" COMMAND anitomy-tests)
-add_test(NAME "Data" COMMAND anitomy-tests --test-data WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test)
+if (NOT EMSCRIPTEN)
+	add_subdirectory(test)
+
+	enable_testing()
+	add_test(NAME "Unit" COMMAND anitomy-tests)
+	add_test(NAME "Data" COMMAND anitomy-tests --test-data WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test)
+endif()
