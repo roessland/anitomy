@@ -26,7 +26,7 @@ if (EMSCRIPTEN)
 		-Oz
 		-flto
 		"-sSTANDALONE_WASM=0"
-		"-sEXPORTED_FUNCTIONS=['_anitomy_parse','_anitomy_free','_malloc','_free']"
+		"-sEXPORTED_FUNCTIONS=['_anitomy_parse','_anitomy_parse_elements','_anitomy_free','_malloc','_free']"
 		"-sEXPORTED_RUNTIME_METHODS=[]"
 		"-sALLOW_MEMORY_GROWTH=1"
 		"-sINITIAL_MEMORY=4MB"
