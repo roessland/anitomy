@@ -5,6 +5,7 @@
 #include <optional>
 #include <span>
 
+#include <anitomy/detail/ranges_polyfill.hpp>
 #include <anitomy/detail/token.hpp>
 #include <anitomy/element.hpp>
 
@@ -45,7 +46,7 @@ inline std::optional<Element> parse_file_extension(std::span<Token> tokens) noex
 
   if (tokens.size() < 2) return {};
 
-  auto view = tokens | reverse | adjacent<2>;
+  auto view = polyfill::adjacent<2>(tokens | reverse);
   auto [last_token, prev_token] = view.front();
 
   if (!is_file_extension(last_token) || !is_dot(prev_token)) return {};

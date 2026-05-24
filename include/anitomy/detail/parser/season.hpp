@@ -6,6 +6,7 @@
 #include <tuple>
 #include <vector>
 
+#include <anitomy/detail/ranges_polyfill.hpp>
 #include <anitomy/detail/token.hpp>
 #include <anitomy/detail/util.hpp>
 #include <anitomy/element.hpp>
@@ -34,7 +35,7 @@ inline std::vector<Element> parse_season(std::span<Token> tokens) noexcept {
              is_free_token(std::get<0>(tokens));
     };
 
-    for (auto view : tokens | std::views::adjacent<3>) {
+    for (auto view : polyfill::adjacent<3>(tokens)) {
       // Check previous token for a number (e.g. `2nd Season`)
       if (ends_with_season_keyword(view)) {
         auto [token, _, season_token] = view;

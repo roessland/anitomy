@@ -12,6 +12,7 @@
 
 #include <anitomy/detail/container.hpp>
 #include <anitomy/detail/element.hpp>
+#include <anitomy/detail/ranges_polyfill.hpp>
 #include <anitomy/detail/token.hpp>
 #include <anitomy/detail/util.hpp>
 #include <anitomy/element.hpp>
@@ -149,7 +150,7 @@ inline std::vector<Element> parse_episode(std::span<Token> tokens) noexcept {
 
   // Fractional episode (e.g. `07.5`)
   {
-    for (auto [number, delimiter, fraction] : tokens | adjacent<3>) {
+    for (auto [number, delimiter, fraction] : polyfill::adjacent<3>(tokens)) {
       if (is_free_token(number) && is_numeric_token(number)) {
         if (is_delimiter_token(delimiter) && delimiter.value == ".") {
           // We don't allow any fractional part other than `.5`, because there are cases
@@ -233,7 +234,7 @@ inline std::vector<Element> parse_episode(std::span<Token> tokens) noexcept {
       return is_free_token(token) && is_numeric_token(token);
     };
 
-    auto view = tokens | adjacent<3> | filter(is_isolated) | filter(is_free_number) | take(1);
+    auto view = polyfill::adjacent<3>(tokens) | filter(is_isolated) | filter(is_free_number) | take(1);
 
     if (!view.empty()) {
       add_element_from_token(ElementKind::Episode, std::get<1>(view.front()));
@@ -252,7 +253,7 @@ inline std::vector<Element> parse_episode(std::span<Token> tokens) noexcept {
       return [pred](const auto& tuple) { return pred(std::get<1>(tuple)); };
     };
 
-    auto view = tokens | enumerate | filter(_(is_free_token)) | filter(_(is_partial_episode));
+    auto view = polyfill::enumerate(tokens) | filter(_(is_free_token)) | filter(_(is_partial_episode));
 
     for (auto [i, token] : view) {
       if (i > 1 && tokens[i - 2].value == "Ver1" && token.value == "1a") {

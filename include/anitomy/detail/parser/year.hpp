@@ -5,6 +5,7 @@
 #include <span>
 #include <tuple>
 
+#include <anitomy/detail/ranges_polyfill.hpp>
 #include <anitomy/detail/token.hpp>
 #include <anitomy/element.hpp>
 
@@ -30,7 +31,7 @@ inline std::optional<Element> parse_year(std::span<Token> tokens) noexcept {
   };
 
   // Find the first free isolated number within the interval
-  auto view = tokens | adjacent<3> | filter(is_isolated) | filter(is_free_number) |
+  auto view = polyfill::adjacent<3>(tokens) | filter(is_isolated) | filter(is_free_number) |
               filter(is_year) | take(1);
 
   if (view.empty()) return {};
